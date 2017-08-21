@@ -1,0 +1,78 @@
+body {
+			background-image: url(images/jamaicanFlag.jpg);
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center center;
+			border: 3px solid red;
+			color:white ;
+			width: auto;
+			height: 100%;
+			padding: 125px 125px 125px 125px;
+
+			}
+		.choice{
+			text-align: left;
+		    padding: 3px 3px  3px 3px;
+		    margin: 3px 3px 3px 3px;
+		    width: 80%;
+		    font-size: 14px;
+		    font-weight: bolder;
+		    background:none;
+		}
+		.jumbotron{
+			opacity: 1;
+			font-size: 24px;
+			font:bolder;
+			height: 40%;
+			background:none;
+			padding-top: 10px;  
+		}
+		span{
+			color: white
+			;
+		}
+		 
+		.panel .panel-heading .panel-body{
+			opacity: 1 ;
+			font: bolder;
+			padding: 10px 10px  10px 10px;
+			background:none;
+				height: 60%;
+
+		}
+
+		.page-header{
+			background: none;
+		}
+		.btn{
+			font-size: 16px; 
+			font: bolder;
+			color: green;
+			padding: 10px 10px  10px 10px;
+			background:none;
+			 
+		}
+		#description{
+			font-size: 16px;
+			text-align: center;
+			background:none;
+			color: white;
+			font: bolder;
+		}
+		#pbd{
+			background: none;
+			color: white;
+			font-size: 16px;
+			font-weight: bold;
+
+		}
+		.badge{
+			background: none;
+			border: 1px solid #4aaaae;
+		}
+		.media{
+			
+			width: 250px;
+			height: 250px;
+		}
+		}
