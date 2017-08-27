@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    var selectQuest=[];
 	$(".food").hide();
 	$(".music").hide();
 	$(".history").hide();
@@ -176,22 +176,22 @@ function checkAnswers() {
 
 			resetValues();
 			resetCounters();
-	         timer = 0;
-		     intervalId = 0;
-			 answerSelected_A='';
-			 answerSelected_B='';
-			 answerSelected_C='';
-			 answerSelected_D='';
-			 rightAnswer='';
-			 selectedAnswer ='';
-			 buttonText='';
-
+			selectQuest=[];
+	        timer = 0;
+		    intervalId = 0;
+			answerSelected_A='';
+			answerSelected_B='';
+			answerSelected_C='';
+			answerSelected_D='';
+			rightAnswer='';
+			selectedAnswer ='';
+			buttonText='';
 			$("#image").hide();
 			$("#description").hide();
 			$("#success").hide();
 			$("#fail").hide();
 			$("#timeUp").hide();
-	 	 
+
 	 }
 //========================================================================	
 function resetValues() {
@@ -203,7 +203,6 @@ function resetValues() {
 				answerSelected_D = ""; 
 			   $("#pt").slideUp(1000);
 		       $("#pb").slideUp(1000);
-
 			     
 }	
 
@@ -211,16 +210,19 @@ function resetCounters() {
 	 		console.log("resetCounters");
 
 			correct = 0;
+			$("#RA").text(correct);
 			wrong = 0;
+			$("#WA").text(wrong);
 			noAnswer = 0;
+			$("#MA").text(noAnswer); 
+			questionsLeft=10;
+			$("#Q").text(questionsLeft);
+			recsLoaded=0;
 			numRecs = 0;
 			questionNum=0;
-			questionsLeft=10;
-			recsLoaded=0;
-			$("#RA").text(correct);
-			$("#WA").text(wrong);
-			$("#Q").text(questionsLeft);
-			$("#MA").text(noAnswer); 
+			
+			
+			
 			console.log("correct = " + correct) ; 
 			console.log("wrong = " + wrong);
 			console.log("noAnswer =" + noAnswer);
@@ -231,9 +233,27 @@ function resetCounters() {
 }
 
 //========================================================================	
+function getRandNum(){ 
+console.log("getRandNum");
+			do { 
+				numRecs= Math.floor((Math.random() * selection.length));
+				console.log (numRecs + " Chosen");
+				console.log("Check : " + (jQuery.inArray(numRecs, selectQuest) == -1));
+				console.log("Array = " + selectQuest);
+			}
+			while (jQuery.inArray(numRecs, selectQuest) !== -1){
+             
+           		 // Get a new number to avoid dupl questions
+                // Adding question selected to  question selected array "selectQuest"
+                selectQuest.push(numRecs);
+            }
+}
 
 function populateValues() {
 	//audio.play(); *****Future upgrade ****
+	$("#quest").show();
+	$("#ansp").show();
+	$("#panel").show();
 	 console.log("populateValues");
 	//Clear out last timer activity
 	 
@@ -251,46 +271,55 @@ function populateValues() {
 	 	console.log("records loaded > 10");
 	 	$("#triviaOver").slideDown();
 	 	timer=0;
-		$("#pt").fadeOut();
-		$("#pB").fadeOut();
-		$("#quest").fadeOut();
-		$("#panel").fadeOut();	
-		$("#ansp").fadeOut();
+		$("#pt").hide();
+		$("#pB").hide();
+		$("#quest").hide();
+		$("#panel").hide();	
+		$("#ansp").hide();
 	 } else { 
 			console.log("Loading Records");
-			numRecs= Math.floor((Math.random() * selection.length));
-			$("#quest").show();
-			$(".answers").show();
-			$("#pt").slideDown(1000);
-  			$("#pb").slideDown(1000);
-			$("#buttonA").show();
-			$("#buttonB").show();
-			$("#buttonC").show();
-			$("#buttonD").show();
+			 
+			//========================================================
+			// Get a new random to load question
+			getRandNum();
+          
+            // Check for duplicate button values. doesn't run existing buttons
+           
+					//=====load question==================================================	
 
-			answerSelected_A = selection[numRecs][1] [0];
-			answerSelected_B = selection[numRecs][1] [1];
-			answerSelected_C = selection[numRecs][1] [2];
-			answerSelected_D = selection[numRecs][1] [3];
-			rightAnswer = selection[numRecs][2];
-			
-			$("#quest").text("Question # " + recsLoaded +": " + selection[numRecs][0]); 
-			$("#buttonA").text("(A):   "+ selection[numRecs][1][0]);
-			$("#buttonB").text("(B):   "+ selection[numRecs][1][1]);
-			$("#buttonC").text("(C):   "+ selection[numRecs][1][2]);
-			$("#buttonD").text("(D):   "+ selection[numRecs][1][3]);
-			$("#description").text(selection[numRecs][3]);
-			imageUrl = selection[numRecs][4];
-			
-			var imgc = $("#image").attr('src');
-		//	alert("image = " + imgc); 
-			console.log("image = " + imgc);
+					$("#quest").show();
+					$(".answers").show();
+					$("#pt").slideDown(1000);
+		  			$("#pb").slideDown(1000);
+					$("#buttonA").show();
+					$("#buttonB").show();
+					$("#buttonC").show();
+					$("#buttonD").show();
 
-		  $("#image").attr('src',imageUrl);
-			imgc = $("#image").attr('src');
-		//alert("image = " + imgc); 
-			console.log("image = " + imgc);
-			runTimer();
+					answerSelected_A = selection[numRecs][1] [0];
+					answerSelected_B = selection[numRecs][1] [1];
+					answerSelected_C = selection[numRecs][1] [2];
+					answerSelected_D = selection[numRecs][1] [3];
+					rightAnswer = selection[numRecs][2];
+					
+					$("#quest").text("Question # " + recsLoaded +": " + selection[numRecs][0]); 
+					$("#buttonA").text("(A):   "+ selection[numRecs][1][0]);
+					$("#buttonB").text("(B):   "+ selection[numRecs][1][1]);
+					$("#buttonC").text("(C):   "+ selection[numRecs][1][2]);
+					$("#buttonD").text("(D):   "+ selection[numRecs][1][3]);
+					$("#description").text(selection[numRecs][3]);
+					imageUrl = selection[numRecs][4];
+					
+					var imgc = $("#image").attr('src');
+				//	alert("image = " + imgc); 
+				//	console.log("image = " + imgc);
+
+				  $("#image").attr('src',imageUrl);
+					imgc = $("#image").attr('src');
+				//alert("image = " + imgc); 
+				//	console.log("image = " + imgc);
+					runTimer();
+					
 	}		
 }
 
@@ -309,15 +338,15 @@ function populateValues() {
 //====================DECREMENT TIMER FUNCTION==================================
     function decrement() {
     	console.log("decrement");
-      console.log("Decrementing Timer by one sec");
+    //  console.log("Decrementing Timer by one sec");
       timer--;
       //  Show the number in the #show-number tag.
       $("#time-left").html("<h2>" + timer + "</h2>");
       //  Once number hits zero... process unanswer questions
       if (timer === 0) {
-        console.log("Incrementing noAnswer by one");
+      //  console.log("Incrementing noAnswer by one");
         noAnswer++;
-		console.log("Decrementing Timer by one sec");
+	//	console.log("Decrementing Timer by one sec");
         clearInterval(intervalId);
         $("#pt").slideUp(1000);
 		$("#pb").slideUp(1000);
@@ -362,7 +391,7 @@ $(".choice").click(function(){
 //===================FOOD ARRAY===================================	
 
 var food=[
-  ["what is Ackee?",["A vegetable","A tree grown fruit","A condiment","A type of milk"],"A tree grown fruit","The flesh of the cooked ackee fruit looks quite similar to fried eggs. Ackee and saltfish is the national breakfast.","assets/images/ackee&saltfish.jpg","assets/images/ackee&saltfish.jpg","ackee & saltfish"],
+  ["what is Ackee?",["A vegetable","A tree grown fruit","A condiment","A type of milk"],"A tree grown fruit","The flesh of the cooked ackee fruit looks quite similar to fried eggs. Ackee and saltfish is the national breakfast.","assets/images/ackee&saltfish.jpg","ackee & saltfish"],
   ["what is festival",["A soup served at weddings","A curry","Fried sugared cornmeal dough","A type of stew"],"Fried sugared cornmeal dough","Festival dumpling is street food at it’s best and traditionally eaten on the beach alongside Escovitch Fish. Festival is sweet, crisp on the outside and dense.","assets/images/festival.jpg","festival"],
   ['what is "manish water"?',["A soup made from coconuts","An alcoholic beverage","A thick fish stew","Goat's head soup"],"Goat's head soup","Goats head soup is a common dish for special occasions such as weddings, nine night ceremonies,restaurants and Dance Hall gatherings","assets/images/manishWater.jpg","manishwater"],
   ["Jamaica Jerk. What is it?",["A spicy salad","A method of barbecuing meat","A blend of pureed vegetables","A spicy salad"],"A method of barbecuing meat","The term jerk is said to come from the word charqui, a Spanish term of Quechua origin for jerked or dried meat, which eventually became the word jerky in English.Jerk is also derived from the action of jerking, which referred to poking meat with holes so that flavor could more easily be absorbed.The term jerk spice (also commonly known as Jamaican jerk spice) refers to a spice rub. The word jerk refers to the spice rub, wet marinade, and to the particular cooking technique. Jerk cooking has developed a following in United States, Canadian and Western European cosmopolitan urban centers with Caribbean/West Indian communities","assets/images/jerkChicken.jpg","jerkchicken"],
@@ -373,7 +402,7 @@ var food=[
   ["What is Duckunu",["Fruity rum cake","A pastry with grated coconut","Pudding","Almond flavored grated coconut" ],"Pudding","Jamaican Blue Drawers or Duckunoo (pronounced doo-koo-noo) is a fairly rare traditional dessert made with mixed ground provisions and raisins. The simple ingredients are wrapped in banana leaves and steamed to become tender morsels. You’ll find this dessert, similar to Barbadian Conkies, in the more rural areas of the island more often than in the cities.","assets/images/Duckunu.jpg","Duckunu"],
   ["What is Bulla and Pear",["Sweet potato pudding with pear","Spiced bun and cheese","A fried dumpling with mixed fruit","Cake with wet sugar and avocado" ],"Cake with wet sugar and avocado","Bulla cake, usually referred to as bulla, is a rich Jamaican cake made with molasses and spiced with ginger and nutmeg, sometimes dark-colored and other times light-colored. Bulla are small loaves that are flat and round. They are inexpensive and easy to make using molasses, flour and baking soda. Bulla is traditionally a popular treat for schoolchildren. It is usually eaten with pear(avocado), cheese or butter","assets/images/bulla&pear.jpg","bulla & pear"],
   [" Made primarily from chips of dried coconut, ginger, spices, brown sugar and have a fudge-like consistency:What is it ?",["Grater Cake","Drops","Matrimony"," Busta Backbone" ],"Drops"," Drops is a carmelized coconut bits mixed with ginger and sugar. It's a favorite treat for Jamaicans","assets/images/drops.jpg","Drops"],
-  ["While technically classified as a fruit, this item is often mistaken for a vegetable. Often paired with saltfish, what is the name of the fruit that is one half of the Jamaican National Dish?",["Mango","Banana","Ackee","Breadfruit" ],"Ackee","The ackee fruit was imported to The Caribbean from Ghana before 1725, as Ackee or Aki is another name for the Akan tribe, Akyem. It is also known as Blighia sapida. The scientific name honours Captain William Bligh who took the fruit from Jamaica to the Royal Botanic Gardens in Kew, England in 1793 and introduced it to science. Because parts of the fruit are toxic, there are shipping restrictions when being imported to countries such as the United States","assets/images/ackee&salt.jpg","ackee"],
+  ["While technically classified as a fruit, this item is often mistaken for a vegetable. Often paired with saltfish, what is the name of the fruit that is one half of the Jamaican National Dish?",["Mango","Banana","Ackee","Breadfruit" ],"Ackee","The ackee fruit was imported to The Caribbean from Ghana before 1725,  The scientific name honours Captain William Bligh who took the fruit from Jamaica to the Royal Botanic Gardens in Kew.","assets/images/ackee&saltfish.jpg","ackee & saltfish"],
   ["Sometimes know as Hell A Top, Hell A Bottom, Hallelujah In De Middle, what is the name of this sweet Jamaican treat?",["Banana Cake","Sweet Potato Pudding","Mango Pie","Papaya Custard" ],"Sweet Potato Pudding","Hell A Top, Hell A Bottom, Hallelujah In De Middle is the name of the Jamaican Sweet Potato Pudding","assets/images/sweetPotatoPudding.jpg","sweetPotatopudding"],
   ["What is the name given to the popular hot pepper used in Jamaican cooking?",[" Hot-Pon-It Peppers","Scotch Bonnet Peppers", "Chillis","Jalapenos" ],"Scotch Bonnet Peppers","Most Scotch bonnets have a heat rating of 100,000–350,000 Scoville units. For comparison, most jalapeño peppers have a heat rating of 2,500 to 8,000 on the Scoville scale. However, completely sweet varieties of Scotch bonnet are grown on some of the Caribbean islands, called cachucha peppers.","assets/images/scotchBonnetPepper.jpg","scotchBonnetPepper"],
   [" Middle Quarters on Jamaica's South Coast is famous for what culinary delight?",["Jerked Pork","Rum Punch","Bammy","Peppered Shrimp" ],"Bammy","Bammy or bami is a traditional Jamaican cassava flatbread descended from the simple flatbread eaten by the Arawaks, Jamaica's original inhabitants. Today, it is produced in many rural communities and sold in stores and by street vendors in Jamaica and abroad.","assets/images/Bammy.jpg","bammy"],
